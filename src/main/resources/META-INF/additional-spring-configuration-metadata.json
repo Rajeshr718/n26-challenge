@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.cache.allow-null-values",
+      "type": "java.lang.String",
+      "description": "Let the Spring cache implementation know whether null values are allowed to be stored in the cache. Defaults to false."
+    }
+  ]
+}
