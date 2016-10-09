@@ -1,13 +1,14 @@
- # Number26 Java code challenge
-
+ 
+# Number26 Java code challenge
+ 
  This project is my solution to the code challenge published by Number26.
  
- ## Get & run it
+## Get & run it
  
  - Clone the project from `master` branch.
  - With Maven installed, just run command `mvn spring-boot:run` at the root of the project. 
  
- ## Project structure
+## Project structure
  
  Project is a Maven project, inheriting from the Spring Boot parent POM in the latest version (1.4.1). 
  It was built using Intellij IDEA and their Spring Initializer tool.
@@ -23,13 +24,13 @@
  - spring-boot-configuration-processor to let IntelliJ help us with configuration properties
  - spring-boot-starter-test to help testing
  
- ## The language
+## The language
  
  Since Java 8 is accepted, we will use the lambda constructs. 
  For instance, I heavily used the Optional.ofNullable.map.orElse whenever dealing with inputs.
  When iterating over collections, I'll use Streams instead of classic loops.
  
- ## The web architecture
+## The web architecture
  
  All web MVC standard, we'll let Spring take care of auto-configuring properties, beans, config files. etc.
  We'll just merely add a few customization properties in the Spring `application.properties` file.
@@ -44,7 +45,7 @@
  
  It will serve REST clients and will answer with JSON objects serialized from data objects created in the controller.
  
- ## The model
+## The model
  
  The REST service deals only with transactions, so the model is limited to a single data class
  
@@ -62,10 +63,12 @@ public class Transaction {
     }
 }
 ```
- ## The persistence
+ 
+## The persistence
  
  By requesting no SQL explicitly, the challenge takes us to an in-memory solution like a cache.
  In my case I chose to use Spring cache directly injecting a ConcurrentMapCache as a Bean:
+ 
  ```
     @Bean
     public ConcurrentMapCache transactionsCache(
@@ -77,10 +80,11 @@ public class Transaction {
  
  As such, TransactionService acts as a limited CRUD service. See javadoc for details.
  
- ## The MVC controller
+## The MVC controller
  
  Since we can benefit from the syntactic sugar provided by Spring MVC, controller maps automatically
  paths to service calls:
+ 
  ```
  @RestController
  @RequestMapping("/transactionservice")
@@ -122,9 +126,10 @@ public class Transaction {
  in Spring and injecting them, I decided to use data wrappers that map directly to the desired JSON
  outputs.
  
- ## Testing
  
- ### TransactionService tests
+## Testing
+ 
+### TransactionService tests
  
  Spring Boot 1.4.1 now comes with an additional set of tools:
  
@@ -132,6 +137,7 @@ public class Transaction {
  - we can use Assertions to add readability to JUnit tests through its fluent API.
  
  This leads to nice readable tests:
+ 
   ```
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -163,7 +169,7 @@ public class TransactionServiceTest {
 
   ```
 
- ### TransactionController tests
+### TransactionController tests
  
  Spring Boot 1.4.1 provides a `@WebMvcTest` annotation that offers us the ability to inject a mock service
  and test just the controller using a MVC context:
@@ -197,7 +203,13 @@ public class TransactionControllerTest {
  
    ```
 
- 
+### Integration testing
+
+ Under normal circumstances, a deployable web stack would expose integration tests using a TestRestTemplate and testing 
+ the web server but the code is said not to be deployable so integration tests are just overkill.
+  
+ I've decided not to implement them.
+
 
  
  
