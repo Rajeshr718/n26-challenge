@@ -36,6 +36,7 @@
  We'll just merely add a few customization properties in the Spring `application.properties` file.
  
  The web front and will listen port 8080 and will be accessible through the following mappings (quoted from log file):
+ 
  ```
  Mapped "{[/transactionservice/transaction/{transaction_id}],methods=[GET]}"
  Mapped "{[/transactionservice/transaction/{transaction_id}],methods=[PUT]}"
@@ -49,7 +50,7 @@
  
  The REST service deals only with transactions, so the model is limited to a single data class
  
-```
+```java
 @Data
 public class Transaction {
     private final List<Transaction> children = new ArrayList<>();
@@ -69,7 +70,7 @@ public class Transaction {
  By requesting no SQL explicitly, the challenge takes us to an in-memory solution like a cache.
  In my case I chose to use Spring cache directly injecting a ConcurrentMapCache as a Bean:
  
- ```
+ ```java
     @Bean
     public ConcurrentMapCache transactionsCache(
             @Value("${spring.cache.allow-null-values: false}") boolean nullValuesAllowed) {
@@ -85,7 +86,7 @@ public class Transaction {
  Since we can benefit from the syntactic sugar provided by Spring MVC, controller maps automatically
  paths to service calls:
  
- ```
+ ```java
  @RestController
  @RequestMapping("/transactionservice")
  public class TransactionController {
@@ -138,7 +139,7 @@ public class Transaction {
  
  This leads to nice readable tests:
  
-  ```
+```java
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TransactionServiceTest {
@@ -173,7 +174,8 @@ public class TransactionServiceTest {
  
  Spring Boot 1.4.1 provides a `@WebMvcTest` annotation that offers us the ability to inject a mock service
  and test just the controller using a MVC context:
-   ```
+
+```java
 @RunWith(SpringRunner.class)
 @WebMvcTest(TransactionController.class)
 public class TransactionControllerTest {
