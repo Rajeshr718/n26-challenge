@@ -113,6 +113,7 @@ public class Transaction {
  
  And the objects returned by the methods are automatically serialized to JSON.
  
+ 
  ## The JSON mapping
  
  Since Spring produces JSON out of the box, I haven't done much except wrapping controller responses into data objects.
